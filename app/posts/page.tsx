@@ -1,17 +1,10 @@
-import { getPosts } from "@app/actions";
-import { Metadata } from "next";
-import Link from "next/link";
-export const metadata: Metadata = {
-  title: "Titre de la page",
-};
-async function Page() {
-  const posts = await getPosts();
+import CreatePostButton from "@/components/posts/CreatePostButton";
+import PostsLists from "@/components/posts/PostsList";
+function Page() {
   return (
-    <div>
-      <Link href="/posts/create">Create a posts</Link>
-      {posts.map((p) => (
-        <div key={p.id}>{p.content}</div>
-      ))}
+    <div className="p-5 h-full w-full relative">
+      <CreatePostButton/>
+      <PostsLists />
     </div>
   );
 }
