@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 import { Field, FieldError } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
-import { createComment } from "@app/actions";
+import { useSession } from "@/lib/auth-client";
+import { createComment } from "@/app/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CirclePlusIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
@@ -24,6 +25,7 @@ function CreateCommentForm({
   parentId: string | null;
   onCancel: () => void;
 }) {
+  const session = useSession();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,9 +35,12 @@ function CreateCommentForm({
 
   const handleFormSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      await createComment(data, postId, parentId);
+      if (session.data)
+        await createComment(data, postId, parentId, session.data.user.id);
+      else throw new Error();
     } catch (error) {
-      toast.error(error as string);
+      console.log(error);
+      toast.error("Error");
     }
     form.reset();
   };

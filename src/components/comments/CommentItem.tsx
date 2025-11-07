@@ -1,33 +1,43 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ThumbsUpIcon } from "lucide-react";
-import type { Comment } from "@/types/types";
+import type { Comment as CommentType } from "@/types/types";
 import { useState } from "react";
 import CreateCommentForm from "./CreateCommentForm";
 import ReplyItem from "./reply-item";
-import { addLikeToComment, deleteLikeFromComment } from "@app/actions";
+import { addLikeToComment, deleteLikeFromComment } from "@/app/actions";
+import { useSession } from "@/lib/auth-client";
 
 function CommentItem({
   postId,
   comment,
 }: {
   postId: string;
-  comment: Comment;
+  comment: CommentType;
 }) {
+  const session = useSession();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const hasLiked = comment.likes?.some(
-    (l) => l.user.id === "cmhf4ca1k0000udrskkmc2yy5"
+    (l) => l.user.id === session.data?.user.id
   );
-  const handleLike = async () => {
+  const handleLike = async (comment: CommentType) => {
     try {
-      if (hasLiked) {
-        return await deleteLikeFromComment(comment);
+      if (!session.data?.user?.id) {
+        throw new Error("User not authenticated");
       }
-      await addLikeToComment(comment);
+      if (hasLiked) {
+        await deleteLikeFromComment(comment, session.data.user.id);
+      } else {
+        await addLikeToComment(comment, session.data.user.id);
+      }
     } catch (error) {
-      throw new Error(error as string);
+      console.error("Failed to update like:", error);
+      throw new Error("Failed to update like");
     }
   };
+
   return (
     <div className="flex flex-col justify-between items-start gap-3 border-l pl-4 mt-3">
       <div className="flex items-center gap-2">
@@ -54,7 +64,7 @@ function CommentItem({
           size="sm"
           variant="ghost"
           type="button"
-          onClick={() => handleLike()}
+          onClick={() => handleLike(comment)}
         >
           <ThumbsUpIcon
             className={`w-4 h-4 ${hasLiked ? "text-blue-600" : ""}`}
