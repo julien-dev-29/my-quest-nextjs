@@ -155,11 +155,10 @@ export async function createProfile(profile: ProfileType, userId: string) {
     })
 }
 
-export async function getProfile() {
-    const userId = (await authClient.getSession()).data?.user.id
-    return await prisma.profile.findFirst({
+export async function getUser(userId: string) {
+    return await prisma.user.findFirst({
         where: {
-            userId: userId
+            id: userId
         }
     })
 }

@@ -20,7 +20,7 @@ function CommentItem({
   const session = useSession();
   const [showReplyForm, setShowReplyForm] = useState(false);
   const hasLiked = comment.likes?.some(
-    (l) => l.user.id === session.data?.user.id
+    (l) => l.user?.id === session.data?.user.id
   );
   const handleLike = async (comment: CommentType) => {
     try {
@@ -42,10 +42,10 @@ function CommentItem({
     <div className="flex flex-col justify-between items-start gap-3 border-l pl-4 mt-3">
       <div className="flex items-center gap-2">
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage src={comment.user?.image} alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <span className="font-semibold">{comment.user.username}</span>
+        <span className="font-semibold">{comment.user?.name}</span>
       </div>
 
       <div className="text-gray-700">{comment.content}</div>

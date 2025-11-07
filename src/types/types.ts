@@ -1,6 +1,8 @@
 export type User = Partial<{
     id: string
+    name: string
     email: string
+    image: string
     posts: Post[]
     comments: Comment[]
     likes: Like[]

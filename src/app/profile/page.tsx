@@ -27,11 +27,12 @@ export default async function ProfilePage() {
     <div>
       <div>
         <div className="flex justify-between items-center">
-          <Link className="text-teal-600" href="/">
+          <Button asChild variant="link">
+            <Link className="text-teal-600" href="/">
             <ArrowBigLeft />
             Back to home
           </Link>
-          <Button asChild variant="link"></Button>
+          </Button>
           <div>
             <ModeToggle />
           </div>
@@ -49,7 +50,7 @@ export default async function ProfilePage() {
             <User />
           )}
           <div>
-            <h1 className="text-5xl font-bold">{session.user.name}</h1>
+            <h1 className="text-4xl font-bold">{session.user.name}</h1>
             <p className="text-muted-foreground">{session.user.email}</p>
           </div>{" "}
         </div>{" "}

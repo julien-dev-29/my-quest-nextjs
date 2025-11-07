@@ -32,10 +32,10 @@ function ReplyItem({ comment }: { comment: CommentType }) {
     <div className="flex flex-col justify-between items-start gap-3 border-l pl-4 mt-3">
       <div className="flex items-center gap-2">
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage src={comment.user?.image} alt={comment.user?.name} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
-        <span className="font-semibold">{comment.user.username}</span>
+        <span className="font-semibold">{comment.user?.name}</span>
       </div>
 
       <div className="text-gray-700">{comment.content}</div>

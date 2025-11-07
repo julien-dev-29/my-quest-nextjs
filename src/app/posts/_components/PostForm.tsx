@@ -21,12 +21,13 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-type FormProps = {
+function PostForm({
+  setIsVisible,
+  className,
+}: {
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   className?: string;
-};
-
-function PostForm({ setIsVisible, className }: FormProps) {
+}) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -63,12 +64,14 @@ function PostForm({ setIsVisible, className }: FormProps) {
             <div className="flex items-center space-x-4">
               <Avatar className="rounded-lg">
                 <AvatarImage
-                  src="https://github.com/evilrabbit.png"
-                  alt="@evilrabbit"
+                  src={session.data?.user.image as string}
+                  alt={session.data?.user.name}
                 />
                 <AvatarFallback>ER</AvatarFallback>
               </Avatar>
-              <div>Jurol</div>
+              <div>
+                <h1>{}</h1>
+              </div>
             </div>
           </CardHeader>
           <CardContent>

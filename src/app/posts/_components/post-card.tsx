@@ -20,11 +20,14 @@ import { Post } from "@/types/types";
 import { addLikeToPost, deleteLikeFromPost } from "@/app/actions";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/lib/auth-client";
+import Link from "next/link";
 
 function PostCard({ post }: { post: Post }) {
   const session = useSession();
   const [showComments, setShowComments] = useState(false);
-  const hasLiked = post.likes?.some((l) => l.user.id === session.data?.user.id);
+  const hasLiked = post.likes?.some(
+    (l) => l.user!.id === session.data?.user.id
+  );
   const handleLike = async () => {
     try {
       if (hasLiked) {
@@ -35,23 +38,29 @@ function PostCard({ post }: { post: Post }) {
       if (session.data) await addLikeToPost(post, session.data.user.id);
       else throw new Error();
     } catch (error) {
-      console.log(error as string);
       throw new Error(error as string);
+      console.log(error as string);
     }
   };
   return (
     <Card>
       <CardHeader>
-        <div className="flex justify-start space-x-2 items-center">
-          <Avatar className="rounded-lg">
-            <AvatarImage
-              src="https://github.com/evilrabbit.png"
-              alt="@evilrabbit"
-            />
-            <AvatarFallback>ER</AvatarFallback>
-          </Avatar>
-          <div>Jurol</div>
-        </div>
+        <Link href={`/profile/${post.author?.id}`}>
+          <div className="flex justify-start space-x-2 items-center">
+            <Avatar className="rounded-full">
+              <AvatarImage
+                src={post.author?.image as string}
+                alt={post.author?.name}
+              />
+              <AvatarFallback>
+                {post.author?.name?.slice(0, 1).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="font-semibold">{post.author?.name}</h1>
+            </div>
+          </div>
+        </Link>
       </CardHeader>
 
       <CardContent>{post.content}</CardContent>
