@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 
-function PostCard({ post }: { post: Post }) {
+function PostCard({ post }: { post: Post | Partial<Post> }) {
   const session = useSession();
   const [showComments, setShowComments] = useState(false);
   const hasLiked = post.likes?.some(
@@ -45,7 +45,7 @@ function PostCard({ post }: { post: Post }) {
   return (
     <Card>
       <CardHeader>
-        <Link href={`/profile/${post.author?.id}`}>
+        <Link href={`/profiles/${post.author?.id}`}>
           <div className="flex justify-start space-x-2 items-center">
             <Avatar className="rounded-full">
               <AvatarImage

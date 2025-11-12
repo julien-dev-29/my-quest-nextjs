@@ -8,6 +8,7 @@ import { LoginForm } from "./_components/login-form";
 import Image from "next/image";
 
 export default function LoginPage() {
+  
   const router = useRouter();
   useEffect(() => {
     authClient.getSession().then((session) => {

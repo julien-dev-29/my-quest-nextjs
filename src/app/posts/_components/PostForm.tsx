@@ -19,8 +19,6 @@ const formSchema = z.object({
   content: z.string().min(2).max(255),
 });
 
-type FormValues = z.infer<typeof formSchema>;
-
 function PostForm({
   setIsVisible,
   className,
@@ -28,14 +26,14 @@ function PostForm({
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   className?: string;
 }) {
-  const form = useForm<FormValues>({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       content: "",
     },
   });
   const session = useSession();
-  const handleFormSubmit = async (data: FormValues) => {
+  const handleFormSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       await createPost(data, session.data?.user.id);
       form.reset();
@@ -70,7 +68,7 @@ function PostForm({
                 <AvatarFallback>ER</AvatarFallback>
               </Avatar>
               <div>
-                <h1>{}</h1>
+                <h1>{session.data?.user.name}</h1>
               </div>
             </div>
           </CardHeader>
@@ -84,7 +82,7 @@ function PostForm({
                     <Field>
                       <Textarea
                         {...field}
-                        placeholder={`What’s on your mind, Jurol?`}
+                        placeholder={`What’s on your mind, ${session.data?.user.name}?`}
                         rows={3}
                       />
                       {fieldState.error && (
@@ -97,15 +95,15 @@ function PostForm({
                 />
               </FieldGroup>
               <div className="mt-4 flex items-center justify-end gap-1">
-                <Button type="submit">
-                  <SendIcon className="w-4 h-4 mr-2" /> Publish
-                </Button>
                 <Button
                   variant="outline"
                   type="button"
                   onClick={() => setIsVisible(false)}
                 >
                   Cancel
+                </Button>
+                <Button type="submit">
+                  <SendIcon className="w-4 h-4 mr-2" /> Publish
                 </Button>
               </div>
             </form>

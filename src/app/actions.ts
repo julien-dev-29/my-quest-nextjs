@@ -4,15 +4,13 @@
 import prisma from "@/lib/prisma";
 import { commentFormSchema, postFormSchema } from "@/schema/posts";
 import { z } from "zod";
-import { Post, Profile } from "../../generated/prisma/client";
+import { Post } from "../../generated/prisma/client";
 import type {
     Post as PostType,
     Profile as ProfileType,
     Comment as CommentType,
 } from "@/types/types";
 import { revalidatePath } from "next/cache";
-import { auth } from "@/lib/auth";
-import { authClient } from "@/lib/auth-client";
 
 /**
  * Creates a new post.
@@ -159,6 +157,64 @@ export async function getUser(userId: string) {
     return await prisma.user.findFirst({
         where: {
             id: userId
+        },
+        include: {
+            posts: {
+                include: {
+                    likes: true,
+                    comments: {
+                        include: {
+                            likes: true,
+                            user: true,
+                            replies: {
+                                include: {
+                                    likes: true,
+                                    user: true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     })
+}
+
+export async function getStories() {
+    return await prisma.story.findMany({
+        include: {
+            user: true
+        }
+    })
+}
+
+export async function createStory(data: {
+    title: string,
+    description: string
+}, userId: string) {
+    await prisma.story.create({
+        data: {
+            title: data.title,
+            description: data.description,
+            userId: userId
+        }
+    })
+    revalidatePath("/stories")
+}
+
+export async function getStory(id: string) {
+    return await prisma.story.findUnique({
+        where: {
+            id: id
+        }
+    })
+}
+
+export async function deleteStory(storyId: string) {
+    await prisma.story.delete({
+        where: {
+            id: storyId
+        }
+    })
+    revalidatePath("/stories")
 }

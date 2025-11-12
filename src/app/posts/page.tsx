@@ -7,8 +7,8 @@ function Page() {
     <div className="flex flex-col gap-5 p-5">
       <div className="">
         <Button variant="link" size="lg" asChild>
-          <Link href="/profile" className="text-teal-700">
-            Profile
+          <Link href="/settings" className="text-teal-700">
+            Settings
           </Link>
         </Button>
       </div>

@@ -1,15 +1,17 @@
 "use client";
 
+import HeroSection from "@/components/hero-section";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { authClient } from "@/lib/auth-client";
+import { authClient, useSession } from "@/lib/auth-client";
 import Link from "next/link";
 
 export default function Home() {
-  const { data: session, isPending: loading } = authClient.useSession();
+  const { data: session, isPending: loading } = useSession();
   if (loading) return <Spinner />;
   return (
-    <div className="my-6 px-5 max-w-md mx-auto">
+    <div className="">
+      <HeroSection></HeroSection>
       <div className="text-center space-y-6">
         {session === null ? (
           <>
@@ -21,7 +23,6 @@ export default function Home() {
         ) : (
           <>
             <h1 className="text-3xl font-bold">Welcome</h1>
-            {/** TODO: Add loading state */}
             <div className="space-x-2">
               <Button asChild>
                 <Link href="/posts">Posts</Link>

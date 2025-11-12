@@ -20,7 +20,7 @@ import { headers } from "next/headers";
 import { Card, CardContent } from "@/components/ui/card";
 import SessionManagement from "./_components/session-management";
 
-export default async function ProfilePage() {
+export default async function SettingsPage() {
   const session = await getServerSession();
   if (session == null) return redirect("/auth/login");
   return (
