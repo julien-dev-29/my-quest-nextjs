@@ -1,5 +1,5 @@
 
-import { getStories } from "../actions";
+import { getStories } from "../stories-actions";
 import StoriesList from "./_components/stories-list";
 import Toolbar from "./_components/toolbar";
 

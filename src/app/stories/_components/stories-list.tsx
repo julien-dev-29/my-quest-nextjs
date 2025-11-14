@@ -3,7 +3,7 @@
 import { Item, ItemTitle } from "@/components/ui/item";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { deleteStory } from "../../actions";
+import { deleteStory } from "@/app/stories-actions";
 import { Story } from "../../../../generated/prisma/client";
 import Link from "next/link";
 

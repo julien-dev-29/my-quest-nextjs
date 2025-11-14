@@ -1,6 +1,6 @@
 "use client";
 
-import { createStory } from "@/app/actions";
+import { createStory } from "@/app/stories-actions";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -52,7 +52,8 @@ function Toolbar() {
       setOpen(false);
       form.reset();
     } catch (error) {
-      toast.error(error as string);
+      console.log(error);
+      toast.error("Failed to create story");
     }
   }
   return (

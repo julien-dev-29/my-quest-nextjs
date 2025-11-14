@@ -29,6 +29,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  // Hooks
   const router = useRouter();
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
@@ -37,6 +38,10 @@ export function LoginForm({
       password: "",
     },
   });
+  /**
+   * 
+   * @param data 
+   */
   function onSubmit(data: z.infer<typeof signInFormSchema>) {
     signIn.email(
       {
@@ -48,7 +53,7 @@ export function LoginForm({
           toast.error(error.error.message);
         },
         onSuccess: () => {
-          router.push("/profile");
+          router.push("/posts");
         },
       }
     );
